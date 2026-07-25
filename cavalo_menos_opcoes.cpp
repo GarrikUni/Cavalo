@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <vector>
 using namespace std;
-//g++ cavalo.cpp -o cavalo
 
 struct Movimento {
     int x;
