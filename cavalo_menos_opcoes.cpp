@@ -140,9 +140,9 @@ int main() {
     bool encontrou = passeioCavalo(linha, coluna, 1, tabuleiro);
 
     auto fim = chrono::steady_clock::now();
-    auto tempoTotal = chrono::duration_cast<chrono::milliseconds>(fim - inicio).count();
+    auto tempoTotal = chrono::duration_cast<chrono::microseconds>(fim - inicio).count();
 
-    cout << "\nTempo de execucao: " << tempoTotal << " ms";
+    cout << "\nTempo de execucao: " << tempoTotal << " us";
     cout << "\nNumero de passos: " << passos << " passos\n";
     
     string tipoSolucao;
