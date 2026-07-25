@@ -5,7 +5,8 @@ using namespace std;
 //g++ cavalo.cpp -o cavalo
 
 const int N = 8;
-const int TEMPO_LIMITE = 60; // segundos
+const int TEMPO_LIMITE = 600; // segundos
+unsigned long long passos = 0;
 
 chrono::steady_clock::time_point inicio;
 bool timeout = false;
@@ -42,7 +43,7 @@ bool passeioCavalo( int x, int y, int movimento, int tabuleiro[N][N] ) {
 
         if ( posicaoValida( proxX, proxY, tabuleiro ) ) {
             tabuleiro[proxX][proxY] = movimento;
-
+            passos++; // Conta qualquer movimento pra frente
             if ( passeioCavalo( proxX, proxY, movimento + 1, tabuleiro ) )
                 return true;
 
@@ -61,6 +62,18 @@ void imprimirTabuleiro ( int tabuleiro[N][N] ) {
         }
         cout << endl;
     }
+}
+
+bool detectaSolucao ( int iniX, int iniY, int tabuleiro[N][N] ) {
+    for ( int i = 0; i < 8; i++ ) {
+        int x = iniX + movX[i];
+        int y = iniY + movY[i];
+
+        if ( x >= 0 && x < N && y >= 0 && y < N && tabuleiro[x][y] == 63 ) {
+            return true;
+        }
+    }
+    return false;
 }
 
 int main() {
@@ -95,10 +108,15 @@ int main() {
     auto fim = chrono::steady_clock::now();
     auto tempoTotal = chrono::duration_cast<chrono::milliseconds>(fim - inicio).count();
 
-    cout << "\nTempo de execucao: " << tempoTotal << " ms\n\n";
+    cout << "\nTempo de execucao: " << tempoTotal << " ms";
+    cout << "\nNumero de passos: " << passos << " passos\n";
+    
+    string tipoSolucao;
 
     if (encontrou) {
+        ( detectaSolucao( linha, coluna, tabuleiro ) ) ? tipoSolucao = "Fechada\n" : tipoSolucao = "Aberta\n";
         cout << "Solucao encontrada!\n";
+        cout << "Solucao: " << tipoSolucao << endl;
         imprimirTabuleiro(tabuleiro);
     } else if (timeout) {
         cout << "Tempo limite de " << TEMPO_LIMITE
